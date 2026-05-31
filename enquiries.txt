@@ -1,0 +1,30 @@
+[]
+
+--- ENQUIRY ---
+Created: 2026-05-29T17:52:26.330Z
+Parent name: Test Parent
+Student name: Test Student
+Class: Nursery
+Phone: 9999999999
+--- END ---
+--- ENQUIRY ---
+Created: 2026-05-29T17:52:37.276Z
+Parent name: qwert
+Student name: xc
+Class: Class 4
+Phone: 1212212121
+--- END ---
+--- ENQUIRY ---
+Created: 2026-05-29T17:56:11.272Z
+Parent name: cds
+Student name: cc
+Class: Nursery
+Phone: +917249457522
+--- END ---
+--- ENQUIRY ---
+Created: 2026-05-29T17:56:37.402Z
+Parent name: Test2
+Student name: cc
+Class: Class 1
+Phone: 9090909090
+--- END ---
