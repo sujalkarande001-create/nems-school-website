@@ -4,7 +4,8 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const ExcelJS = require("exceljs");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
@@ -57,18 +58,11 @@ async function appendEnquiryToXlsx(filePath, payload) {
 }
 
 async function emailXlsx(filePath) {
-    const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-        },
-    });
-    const info = await transporter.sendMail({
-        from: `"New English Medium School" <${process.env.SMTP_USER}>`,
-        to: MAIL_TO,
+    const fileBase64 = fs.readFileSync(filePath).toString("base64");
+
+    const { data, error } = await resend.emails.send({
+        from: "New English Medium School <onboarding@resend.dev>",
+        to: [process.env.MAIL_TO],
         subject: "New Admission Enquiry",
         html: `
             <h2>New Admission Enquiry Received</h2>
@@ -76,13 +70,15 @@ async function emailXlsx(filePath) {
         `,
         attachments: [{
             filename: "enquiries.xlsx",
-            path: filePath,
+            content: fileBase64,
         }, ],
     });
 
-    console.log("Email sent successfully");
-    console.log("Accepted:", info.accepted);
-    console.log("Rejected:", info.rejected);
+    if (error) {
+        throw new Error(JSON.stringify(error));
+    }
+
+    console.log("Email sent successfully:", data);
 }
 
 function serveStaticFile(res, filePath) {
